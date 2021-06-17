@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace SWS.Server.Http
 {
-    public class HttpRequest
+    public class HttpResponse
     {
-        public HttpMethod Method { get; private set; }
-        public string Url { get; private set; }
+        public HttpStatusCode StatusCode { get; init; }
         public HttpHeaderCollection Headers { get; } = new HttpHeaderCollection();
-        public string Body { get; private set; }
+        public string Content { get; init; }
     }
 }
