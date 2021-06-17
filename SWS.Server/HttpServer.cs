@@ -10,11 +10,11 @@ namespace SWS.Server
     {
         private const string ipAddress = "127.0.0.1";
         private const int defaultPort = 9090;
-        private TcpListener serverListener;
+        private readonly TcpListener serverListener;
         public HttpServer(string ipAddress, int port)
         {
-            var temp = IPAddress.Parse(ipAddress);
-            serverListener = new TcpListener(temp, port);
+            var tempIp = IPAddress.Parse(ipAddress);
+            serverListener = new TcpListener(tempIp, port);
             Console.WriteLine($"Server started on port {port}, waiting for client connection...");
             serverListener.Start();
         }
@@ -42,7 +42,10 @@ namespace SWS.Server
 
                 Console.WriteLine();
                 Console.WriteLine("SENDING RESPONSE:");
-                var content = "Hello World";
+                var content = @"<head></head>
+<body>
+<h1>Hello From My Server!</h1>
+</body>";
                 var response = SetResponse(content);
                 Console.WriteLine(Encoding.UTF8.GetString(response));
 
@@ -75,7 +78,7 @@ namespace SWS.Server
             sb2.AppendLine("Server: SoftUni Web Server");
             sb2.AppendLine($"Date: {DateTime.UtcNow.ToString("r")}");
             sb2.AppendLine($"Content-Length: {contentLength}");
-            sb2.AppendLine("Content-Type: text/plain; charset=UTF-8");
+            sb2.AppendLine("Content-Type: text/html; charset=UTF-8");
             sb2.AppendLine();
             sb2.AppendLine(content);
 
