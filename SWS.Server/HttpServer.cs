@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SWS.Server.Http;
+using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -55,7 +56,7 @@ namespace SWS.Server
             }
         }
 
-        public async Task<string> GetRequest(NetworkStream networkStream)
+        public async Task<HttpRequest> GetRequest(NetworkStream networkStream)
         {
             var bufferLength = 1024;
             var buffer = new byte[bufferLength];
@@ -67,7 +68,7 @@ namespace SWS.Server
                 sb1.Append(Encoding.UTF8.GetString(buffer, 0, bytesRead));
             }
 
-            return sb1.ToString();
+            return HttpRequest.Parse(sb1.ToString());
         }
 
         public byte[] SetResponse(string content)

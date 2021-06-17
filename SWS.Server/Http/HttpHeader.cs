@@ -13,7 +13,7 @@ namespace SWS.Server.Http
 
         public static HttpHeader Parse(string header)
         {
-            var headerMembers = header.Split(":");
+            var headerMembers = header.Split(":", 2);
             var name = headerMembers[0].Trim();
             var value = headerMembers[1].Trim();
 

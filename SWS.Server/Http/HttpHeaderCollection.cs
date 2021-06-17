@@ -28,7 +28,7 @@ namespace SWS.Server.Http
 
             foreach (var line in headerAndBodyLines)
             {
-                if (line == GlobalConstants.NewLine)
+                if (line == String.Empty)
                 {
                     break;
                 }
