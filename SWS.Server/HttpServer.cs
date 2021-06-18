@@ -1,4 +1,6 @@
-﻿using SWS.Server.Http;
+﻿using Common;
+using SWS.Server.Http;
+using SWS.Server.Routing;
 using System;
 using System.Net;
 using System.Net.Sockets;
@@ -14,6 +16,9 @@ namespace SWS.Server
         private readonly TcpListener serverListener;
         public HttpServer(string ipAddress, int port)
         {
+            Guard.AgainstNull(ipAddress, "Server IP Address");
+            Guard.AgainstNull(port, "Server Port");
+
             var tempIp = IPAddress.Parse(ipAddress);
             serverListener = new TcpListener(tempIp, port);
             Console.WriteLine($"Server started on port {port}, waiting for client connection...");
@@ -24,6 +29,11 @@ namespace SWS.Server
             :this(ipAddress, defaultPort)
         {
         }
+
+        //public HttpServer(Action<IRoutingTable> routingAction)
+        //    : this(ipAddress, defaultPort)
+        //{
+        //}
 
         public async Task Start()
         {

@@ -14,6 +14,7 @@ namespace SWS.Server.Responses
             var textLength = Encoding.UTF8.GetByteCount(text);
             this.Headers.Add("Content-Length", $"{textLength}");
             this.Headers.Add("Content-Type", "text/html; charset=UTF-8");
+            this.Content = text;
         }
     }
 }

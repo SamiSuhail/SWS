@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace SWS.Server.Routing
 {
-    interface IRoutingTable
+    public interface IRoutingTable
     {
-        IRoutingTable Map(string url, HttpResponse response);
         IRoutingTable Map(string url, HttpMethod method, HttpResponse response);
         IRoutingTable MapGet(string url, HttpResponse response);
     }

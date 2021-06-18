@@ -9,6 +9,30 @@ namespace SWS.Server.Http
 {
     public class HttpRequest
     {
+        public HttpRequest(HttpMethod method, string url, HttpHeaderCollection headers, string body = null )
+        {
+            Guard.AgainstNull(method, "Http Request Method");
+            Guard.AgainstNull(url, "Http Request Url");
+            Guard.AgainstNull(headers, "Http Request Headers");
+
+            this.Method = method;
+            this.Url = url;
+            this.Headers = headers;
+            this.Body = body;
+        }
+
+        public HttpRequest(string method, string url, string[] headers, string body = null)
+        {
+            Guard.AgainstNull(method, "Http Request Method");
+            Guard.AgainstNull(url, "Http Request Url");
+            Guard.AgainstNull(headers, "Http Request Headers");
+
+            this.Method = HttpRequest.ParseMethod(method);
+            this.Url = url;
+            this.Headers = HttpHeaderCollection.Parse(headers);
+            this.Body = body;
+
+        }
         public HttpMethod Method { get; private set; }
         public string Url { get; private set; }
         public HttpHeaderCollection Headers { get; private set; } = new HttpHeaderCollection();
@@ -29,7 +53,7 @@ namespace SWS.Server.Http
             var bodyLines = headerAndBodyLines.Skip(1 + headerCollection.Count);
             var body = string.Join(String.Empty, bodyLines);
 
-            return new HttpRequest() { Method = method, Url = url, Headers = headerCollection, Body = body };
+            return new HttpRequest(method, url, headerCollection, body);
         }
 
         private static HttpMethod ParseMethod(string method)
