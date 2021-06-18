@@ -23,7 +23,11 @@ namespace SWS.Server.Http
             => this.headers.Add(header.Name, header);
 
         public void Add(string name, string value)
-            => this.headers.Add(name, new HttpHeader(name, value));
+        {
+            Guard.AgainstNull(name, "Header Name");
+            Guard.AgainstNull(value, "Header Value");
+            this.headers.Add(name, new HttpHeader(name, value)); 
+        }
 
         public static HttpHeaderCollection Parse(IEnumerable<string> headerAndBodyLines)
         {

@@ -68,6 +68,22 @@ namespace SWS.Server.Http
             };
         }
 
-        
+        public override string ToString()
+        {
+            var requestBuilder = new StringBuilder();
+            requestBuilder.AppendLine($"{this.Method} {this.Url} HTTP/1.1");
+            foreach (var header in this.Headers)
+            {
+                requestBuilder.AppendLine(header.ToString());
+            }
+
+            if (!string.IsNullOrEmpty(this.Body))
+            {
+                requestBuilder.AppendLine();
+                requestBuilder.AppendLine(this.Body);
+            }
+
+            return requestBuilder.ToString();
+        }
     }
 }

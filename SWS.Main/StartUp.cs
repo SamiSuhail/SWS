@@ -13,9 +13,9 @@ namespace SWS
     {
         static async Task Main()
         {
-            var server = new HttpServer();
-                //routes => routes.MapGet("/", new TextResponse("Welcome to the home page"))
-                //                                        .MapGet("/Cats", new TextResponse("Welcome to the cats page")));
+            var server = new HttpServer(routes => routes.MapGet("/", new HtmlResponse("<h1>Welcome to the home page</h1>"))
+                                                    .MapGet("/Cats", new HtmlResponse("<h1>Welcome to the cats page</h1>")));
+            
 
             await server.Start();
         }

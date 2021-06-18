@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace SWS.Server.Responses
 {
-    public class TextResponse : ContentResponse
+    public class HtmlResponse : ContentResponse
     {
-        public TextResponse(string text) : base(text, "text/plain")
+        public HtmlResponse(string textHtml) : base(textHtml, "text/html")
         {
-
+            
         }
     }
 }
