@@ -9,8 +9,11 @@ namespace SWS.Server.Routing
 {
     public interface IRoutingTable
     {
-        IRoutingTable Map(string url, HttpMethod method, HttpResponse response);
-        IRoutingTable MapGet(string url, HttpResponse response);
+        IRoutingTable Map(HttpMethod method, string path, HttpResponse response);
+        IRoutingTable MapGet(string path, HttpResponse response);
+        IRoutingTable MapPost(string path, HttpResponse response);
+        IRoutingTable MapPut(string path, HttpResponse response);
+        IRoutingTable MapDelete(string path, HttpResponse response);
         public HttpResponse MatchRequest(HttpRequest request);
     }
 }

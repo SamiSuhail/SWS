@@ -9,14 +9,16 @@ namespace SWS.Server.Http
 {
     public class HttpRequest
     {
-        public HttpRequest(HttpMethod method, string url, HttpHeaderCollection headers, string body = null )
+        public HttpRequest(HttpMethod method, string url, HttpHeaderCollection headers, string body = null)
         {
             Guard.AgainstNull(method, "Http Request Method");
-            Guard.AgainstNull(url, "Http Request Url");
+            Guard.AgainstNull(url, "Http Request Path");
             Guard.AgainstNull(headers, "Http Request Headers");
 
             this.Method = method;
-            this.Url = url;
+            (var path, var queryString) = ParseUrl(url);
+            this.Path = path;
+            this.Query = queryString;
             this.Headers = headers;
             this.Body = body;
         }
@@ -24,17 +26,21 @@ namespace SWS.Server.Http
         public HttpRequest(string method, string url, string[] headers, string body = null)
         {
             Guard.AgainstNull(method, "Http Request Method");
-            Guard.AgainstNull(url, "Http Request Url");
+            Guard.AgainstNull(url, "Http Request Path");
             Guard.AgainstNull(headers, "Http Request Headers");
 
             this.Method = HttpRequest.ParseMethod(method);
-            this.Url = url;
+            (var path, var queryString) = ParseUrl(url);
+            this.Path = path;
+            this.Query = queryString;
             this.Headers = HttpHeaderCollection.Parse(headers);
             this.Body = body;
 
         }
+
         public HttpMethod Method { get; private set; }
-        public string Url { get; private set; }
+        public string Path { get; private set; }
+        public Dictionary<string,string> Query { get; private set; }
         public HttpHeaderCollection Headers { get; private set; } = new HttpHeaderCollection();
         public string Body { get; private set; }
 
@@ -68,10 +74,49 @@ namespace SWS.Server.Http
             };
         }
 
+        private static Dictionary<string,string> ParseQuery(string queryString)
+        {
+            Guard.AgainstNull(queryString, "Query String");
+            var queries = queryString.Split('&');
+
+            var dict = new Dictionary<string, string>();
+
+            foreach (var query in queries)
+            {
+                var queryParts = query.Split('=');
+
+                if (queryParts.Length != 2)
+                {
+                    continue;
+                }
+
+                var queryKey = queryParts[0];
+                var queryValue = queryParts[1];
+
+                dict.Add(queryKey, queryValue);
+            }
+
+            return dict;
+        }
+
+        private static (string path, Dictionary<string,string> query) ParseUrl(string url)
+        {
+            var urlParts = url.Split('?');
+            var path = urlParts[0];
+            Dictionary<string, string> query = null;
+
+            if (urlParts.Length > 1)
+            {
+                query = ParseQuery(urlParts[1]);
+            }
+
+            return (path, query);
+        }
+
         public override string ToString()
         {
             var requestBuilder = new StringBuilder();
-            requestBuilder.AppendLine($"{this.Method} {this.Url} HTTP/1.1");
+            requestBuilder.AppendLine($"{this.Method} {this.Path}{QueryToString(this.Query)} HTTP/1.1");
             foreach (var header in this.Headers)
             {
                 requestBuilder.AppendLine(header.ToString());
@@ -84,6 +129,27 @@ namespace SWS.Server.Http
             }
 
             return requestBuilder.ToString();
+        }
+
+        private static string QueryToString(Dictionary<string, string> query)
+        {
+            if (query == null)
+            {
+                return null;
+            }
+            var queryBuilder = new List<string>();
+
+            foreach (var kvp in query)
+            {
+                queryBuilder.Add($"{kvp.Key}={kvp.Value}");
+            }
+
+            if (!query.Any())
+            {
+                return null;
+            }
+
+            return '?' + string.Join('&', queryBuilder);
         }
     }
 }
