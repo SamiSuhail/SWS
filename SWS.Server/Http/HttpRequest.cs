@@ -101,7 +101,7 @@ namespace SWS.Server.Http
 
         private static (string path, Dictionary<string,string> query) ParseUrl(string url)
         {
-            var urlParts = url.Split('?');
+            var urlParts = url.Split('?', 2);
             var path = urlParts[0];
             Dictionary<string, string> query = null;
 
