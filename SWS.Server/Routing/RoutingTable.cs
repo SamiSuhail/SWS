@@ -37,7 +37,7 @@ namespace SWS.Server.Routing
             Guard.AgainstNull(method, "Http Method");
             Guard.AgainstNull(responseFunc, "Http ResponseFunc in router");
 
-            this.routes[method][path] = responseFunc;
+            this.routes[method][path.ToLower()] = responseFunc;
 
             return this;
         }
@@ -74,7 +74,7 @@ namespace SWS.Server.Routing
                 return new NotFoundResponse(@$"<h1>{request.Path} does not represent a valid Path</h1>");
             }
 
-            var func = this.routes[request.Method][request.Path];
+            var func = this.routes[request.Method][request.Path.ToLower()];
 
             return func(request);
         }

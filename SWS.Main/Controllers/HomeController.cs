@@ -19,5 +19,10 @@ namespace SWS.Controllers
         {
             return new HtmlResponse("<h1>Welcome to the home page</h1>");
         }
+
+        public HttpResponse ToSoftUni()
+        {
+            return new RedirectResponse("https://softuni.bg");
+        }
     }
 }

@@ -16,7 +16,8 @@ namespace SWS
         {
             var server = new HttpServer(routes => routes.MapGet("/", request => new HomeController(request).Index())
                                                     .MapGet("/Cats", request => new AnimalsController(request).Cats())
-                                                    .MapGet("/Dogs", request => new AnimalsController(request).Dogs()));
+                                                    .MapGet("/Dogs", request => new AnimalsController(request).Dogs())
+                                                    .MapGet("/SoftUni", request => new HomeController(request).ToSoftUni()));
             
 
             await server.Start();
