@@ -14,6 +14,12 @@ namespace SWS.Server.Routing
         IRoutingTable MapPost(string path, HttpResponse response);
         IRoutingTable MapPut(string path, HttpResponse response);
         IRoutingTable MapDelete(string path, HttpResponse response);
-        public HttpResponse MatchRequest(HttpRequest request);
+
+        IRoutingTable Map(HttpMethod method, string path, Func<HttpRequest, HttpResponse> responseFunc);
+        IRoutingTable MapGet(string path, Func<HttpRequest, HttpResponse> responseFunc);
+        IRoutingTable MapPost(string path, Func<HttpRequest, HttpResponse> responseFunc);
+        IRoutingTable MapPut(string path, Func<HttpRequest, HttpResponse> responseFunc);
+        IRoutingTable MapDelete(string path, Func<HttpRequest, HttpResponse> responseFunc);
+        public HttpResponse ExecuteRequest(HttpRequest request);
     }
 }

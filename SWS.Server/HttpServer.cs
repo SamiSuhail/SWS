@@ -55,7 +55,7 @@ namespace SWS.Server
 
                 Console.WriteLine();
                 Console.WriteLine("SENDING RESPONSE:");
-                var response = routingTable.MatchRequest(request);
+                var response = routingTable.ExecuteRequest(request);
                 Console.WriteLine(response.ToString());
                 await WriteResponse(networkStream, response);
 

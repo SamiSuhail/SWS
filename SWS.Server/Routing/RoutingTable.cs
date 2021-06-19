@@ -11,7 +11,7 @@ namespace SWS.Server.Routing
 {
     public class RoutingTable : IRoutingTable
     {
-        private readonly Dictionary<HttpMethod, Dictionary<string, HttpResponse>> routes;
+        private readonly Dictionary<HttpMethod, Dictionary<string, Func<HttpRequest,HttpResponse>>> routes;
         public RoutingTable()
         {
             this.routes = new()
@@ -25,11 +25,19 @@ namespace SWS.Server.Routing
 
         public IRoutingTable Map(HttpMethod method, string path, HttpResponse response)
         {
-            Guard.AgainstNull(path, "Path");
-            Guard.AgainstNull(method, "Http Method");
             Guard.AgainstNull(response, "Http Response in router");
 
-            this.routes[method][path] = response;
+
+            return this.Map(method, path, request => response);
+        }
+
+        public IRoutingTable Map(HttpMethod method, string path, Func<HttpRequest, HttpResponse> responseFunc)
+        {
+            Guard.AgainstNull(path, "Path");
+            Guard.AgainstNull(method, "Http Method");
+            Guard.AgainstNull(responseFunc, "Http ResponseFunc in router");
+
+            this.routes[method][path] = responseFunc;
 
             return this;
         }
@@ -43,7 +51,18 @@ namespace SWS.Server.Routing
         public IRoutingTable MapDelete(string path, HttpResponse response)
                         => this.Map(HttpMethod.Delete, path, response);
 
-        public HttpResponse MatchRequest(HttpRequest request)
+        public IRoutingTable MapGet(string path, Func<HttpRequest, HttpResponse> responseFunc)
+                    => this.Map(HttpMethod.Get, path, responseFunc);
+        public IRoutingTable MapPost(string path, Func<HttpRequest, HttpResponse> responseFunc)
+                    => this.Map(HttpMethod.Post, path, responseFunc);
+        public IRoutingTable MapPut(string path, Func<HttpRequest, HttpResponse> responseFunc)
+                    => this.Map(HttpMethod.Put, path, responseFunc);
+        public IRoutingTable MapDelete(string path, Func<HttpRequest, HttpResponse> responseFunc)
+                    => this.Map(HttpMethod.Delete, path, responseFunc);
+
+
+
+        public HttpResponse ExecuteRequest(HttpRequest request)
         {
             if (!this.routes.ContainsKey(request.Method))
             {
@@ -55,7 +74,13 @@ namespace SWS.Server.Routing
                 return new NotFoundResponse(@$"<h1>{request.Path} does not represent a valid Path</h1>");
             }
 
-            return this.routes[request.Method][request.Path];
+            var func = this.routes[request.Method][request.Path];
+
+            return func(request);
         }
+
+        
+
+
     }
 }
