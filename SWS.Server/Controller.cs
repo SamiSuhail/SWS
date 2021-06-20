@@ -1,4 +1,5 @@
 ﻿using SWS.Server.Http;
+using SWS.Server.Responses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,9 @@ namespace SWS.Controllers
         protected Controller(HttpRequest request)
             => this.request = request;
 
-
+        protected HttpResponse Text(string text) => new TextResponse(text);
+        protected HttpResponse Html(string html) => new HtmlResponse(html);
+        protected HttpResponse Redirect(string location) => new RedirectResponse(location);
 
     }
 }

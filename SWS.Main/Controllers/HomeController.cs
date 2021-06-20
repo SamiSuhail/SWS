@@ -17,12 +17,12 @@ namespace SWS.Controllers
 
         public HttpResponse Index()
         {
-            return new HtmlResponse("<h1>Welcome to the home page</h1>");
+            return Html("<h1>Welcome to the home page</h1>");
         }
 
         public HttpResponse ToSoftUni()
         {
-            return new RedirectResponse("https://softuni.bg");
+            return Redirect("https://softuni.bg");
         }
     }
 }

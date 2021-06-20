@@ -25,7 +25,7 @@ namespace SWS.Controllers
                 catName = request.Query["Name"];
             }
 
-            return new HtmlResponse($"<h1>Welcome to the Cats page, you are currently looking at {catName}!</h1>");
+            return Html($"<h1>Welcome to the Cats page, you are currently looking at {catName}!</h1>");
         }
 
         public HttpResponse Dogs()
@@ -38,7 +38,7 @@ namespace SWS.Controllers
                 dogName = request.Query["Name"];
             }
 
-            return new HtmlResponse($"<h1>Welcome to the Cats page, you are currently looking at {dogName}!</h1>");
+            return Html($"<h1>Welcome to the Cats page, you are currently looking at {dogName}!</h1>");
         }
     }
 }
